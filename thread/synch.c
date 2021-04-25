@@ -221,30 +221,17 @@ void lock_destroy(struct lock *lock) {
 
 void lock_acquire(struct lock *lock) {
     KASSERT(lock != NULL);
-    KASSERT(lock->owner==NULL);
     
     KASSERT(curthread->t_in_interrupt == false);
 
-    //SE NON E' VERIFICATA L'OWNERSHIP SI PIANTA
     spinlock_acquire(&lock->lk_lock);
 
     while (lock->lk_count == 0) {
-        /*
-		 *
-		 * Note that we don't maintain strict FIFO ordering of
-		 * threads going through the semaphore; that is, we
-		 * might "get" it on the first try even if other
-		 * threads are waiting. Apparently according to some
-		 * textbooks semaphores must for some reason have
-		 * strict ordering. Too bad. :-)
-		 *
-		 * Exercise: how would you implement strict FIFO
-		 * ordering?
-		 */
         wchan_sleep(lock->lk_wchan, &lock->lk_lock);
     }
     KASSERT(lock->lk_count > 0);
     lock->lk_count--;
+    KASSERT(lock->owner==NULL);
     lock->owner=curthread;
     spinlock_release(&lock->lk_lock);
 }
@@ -287,8 +274,9 @@ cv_create(const char *name) {
         kfree(cv);
         return NULL;
     }
-
-    // add stuff here as needed
+    cv->wait_counter=0;
+    cv->lk->lk_name=cv->cv_name;
+    cv->sem=sem_create(cv->cv_name,1);
 
     return cv;
 }
@@ -296,26 +284,31 @@ cv_create(const char *name) {
 void cv_destroy(struct cv *cv) {
     KASSERT(cv != NULL);
 
-    // add stuff here as needed
+    lock_destroy(cv->lk);
+    sem_destroy(cv->sem);
 
     kfree(cv->cv_name);
     kfree(cv);
 }
 
 void cv_wait(struct cv *cv, struct lock *lock) {
-    // Write this
-    (void)cv;    // suppress warning until code gets written
-    (void)lock;  // suppress warning until code gets written
+    cv->wait_counter++;
+    lock_release(lock);
+    P(cv->sem);
+    lock_acquire(lock);
+    cv->wait_counter--;
 }
 
 void cv_signal(struct cv *cv, struct lock *lock) {
-    // Write this
-    (void)cv;    // suppress warning until code gets written
-    (void)lock;  // suppress warning until code gets written
+    KASSERT(lock->owner==curthread);
+    V(cv->sem);
 }
 
 void cv_broadcast(struct cv *cv, struct lock *lock) {
-    // Write this
-    (void)cv;    // suppress warning until code gets written
-    (void)lock;  // suppress warning until code gets written
+    KASSERT(lock->owner==curthread);
+    for (int i = 0; i < cv->wait_counter; i++)
+    {
+        V(cv->sem);
+    }
+    cv->wait_counter=0;
 }
