@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "*.js": "javascriptreact",
+        "autoconf.h": "c",
+        "lib.h": "c",
+        "opt-noasserts.h": "c",
+        "version.h": "c",
+        "types.h": "c",
+        "errno.h": "c",
+        "reboot.h": "c",
+        "unistd.h": "c",
+        "system_error": "c",
+        "vm.h": "c",
+        "opt-sync1.h": "c",
+        "opt-lab2.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
+}
