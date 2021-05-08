@@ -449,6 +449,7 @@ file syscall/file_syscalls.c
 file syscall/proc_syscalls.c
 
 defoption sync1
-
 defoption sync2
+defoption cvsem
+defoption cvwc
 

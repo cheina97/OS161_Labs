@@ -38,6 +38,8 @@
 
 #include "opt-sync2.h"
 #include "opt-sync1.h"
+#include "opt-cvwc.h"
+#include "opt-cvsem.h"
 
 /*
  * Dijkstra-style semaphore.
@@ -127,6 +129,7 @@ bool lock_do_i_hold(struct lock *);
  * (should be) made internally.
  */
 
+#if OPT_CVSEM
 struct cv {
     char *cv_name;
     struct lock *lk;
@@ -136,6 +139,20 @@ struct cv {
 
 struct cv *cv_create(const char *name);
 void cv_destroy(struct cv *);
+
+#endif
+
+#if OPT_CVWC
+struct cv {
+    char *cv_name;
+    struct wchan *wc;
+    struct spinlock *slk;
+};
+
+struct cv *cv_create(const char *name);
+void cv_destroy(struct cv *);
+
+#endif
 
 /*
  * Operations:
