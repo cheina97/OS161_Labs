@@ -47,6 +47,8 @@
 #include "opt-net.h"
 #include "opt-sfs.h"
 #include "vm.h"
+#include "syscall.h"
+#include "synch.h"
 
 /*
  * In-kernel menu and command dispatcher.
@@ -112,10 +114,15 @@ cmd_progthread(void *ptr, unsigned long nargs) {
 static int
 common_prog(int nargs, char **args) {
     struct proc *proc;
+
     int result;
 
     /* Create a process for the new program to run in. */
     proc = proc_create_runprogram(args[0] /* name */);
+
+    //AGGIUNTO DA ME
+    proc->semSyncExit= sem_create("Semaforo per sync della exit()",0);
+
     if (proc == NULL) {
         return ENOMEM;
     }
@@ -134,8 +141,9 @@ common_prog(int nargs, char **args) {
 	 * The new process will be destroyed when the program exits...
 	 * once you write the code for handling that.
 	 */
-
-    return 0;
+    int exit_code=proc_wait(proc);
+    kprintf("SONO USCITO CON STATO: %d\n",exit_code);
+    return exit_code;
 }
 
 /*

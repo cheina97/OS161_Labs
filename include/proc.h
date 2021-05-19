@@ -38,6 +38,9 @@
 
 #include <spinlock.h>
 
+#include "opt-wp1.h"
+#include <synch.h>
+
 struct addrspace;
 struct thread;
 struct vnode;
@@ -71,7 +74,9 @@ struct proc {
 	struct vnode *p_cwd;		/* current working directory */
 
 	/* add more material here as needed */
-	int errcode;
+	int status;
+
+	struct semaphore* semSyncExit;	
 };
 
 /* This is the process structure for the kernel and for kernel-only threads. */
@@ -98,5 +103,8 @@ struct addrspace *proc_getas(void);
 /* Change the address space of the current process, and return the old one. */
 struct addrspace *proc_setas(struct addrspace *);
 
+#ifdef OPT_WP1
+int proc_wait(struct proc *p);
+#endif // 0
 
 #endif /* _PROC_H_ */

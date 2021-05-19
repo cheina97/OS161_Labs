@@ -351,7 +351,6 @@ void cv_destroy(struct cv *cv) {
 }
 
 void cv_wait(struct cv *cv, struct lock *lock) {
-
     spinlock_acquire(cv->slk);
     lock_release(lock);
     wchan_sleep(cv->wc,cv->slk);

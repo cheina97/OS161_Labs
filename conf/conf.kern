@@ -452,4 +452,5 @@ defoption sync1
 defoption sync2
 defoption cvsem
 defoption cvwc
+defoption wp1
 

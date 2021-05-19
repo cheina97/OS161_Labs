@@ -5,6 +5,14 @@
             "includePath": [
                 "/home/cheina/os161/os161-base-2.0.3/kern/include",
                 "/home/cheina/os161/os161-base-2.0.3/kern/lib",
+                "/home/cheina/os161/os161-base-2.0.3/kern/compile/WP4",
+                "/home/cheina/os161/os161-base-2.0.3/kern/compile/WP4/includelinks",
+                "/home/cheina/os161/os161-base-2.0.3/kern/compile/WP3",
+                "/home/cheina/os161/os161-base-2.0.3/kern/compile/WP3/includelinks",
+                "/home/cheina/os161/os161-base-2.0.3/kern/compile/WP2",
+                "/home/cheina/os161/os161-base-2.0.3/kern/compile/WP2/includelinks",
+                "/home/cheina/os161/os161-base-2.0.3/kern/compile/WP1",
+                "/home/cheina/os161/os161-base-2.0.3/kern/compile/WP1/includelinks",
                 "/home/cheina/os161/os161-base-2.0.3/kern/compile/DUMBVM",
                 "/home/cheina/os161/os161-base-2.0.3/kern/compile/DUMBVM/includelinks",
                 "/home/cheina/os161/os161-base-2.0.3/kern/compile/CVWC",
@@ -40,7 +48,6 @@
                 "/home/cheina/os161/os161-base-2.0.3/userland/include/sys",
                 "/home/cheina/os161/os161-base-2.0.3/userland/lib/hostcompat",
                 "/home/cheina/os161/os161-base-2.0.3/common/gcc-millicode"
-                
                 /* "/home/cheina/os161/tools/include/gdb",
                 "/home/cheina/os161/tools/lib/gcc/mips-harvard-os161/4.8.3/plugin/include/c-family",
                 "/home/cheina/os161/tools/lib/gcc/mips-harvard-os161/4.8.3/plugin/include/config/mips",
@@ -61,7 +68,8 @@
                 "/home/cheina/os161/root/include/test",
                 "/home/cheina/os161/root/include/types",
                 "/home/cheina/os161/root/include/sys",
-                "/home/cheina/os161/root/include/machine" */
+                "/home/cheina/os161/root/include/machine" */,
+                "/usr/include"
             ],
             "defines": [],
             "compilerPath": "${env:HOME}/os161/tools/bin/mips-harvard-os161-gcc",

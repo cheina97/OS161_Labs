@@ -48,6 +48,7 @@
 #include <current.h>
 #include <addrspace.h>
 #include <vnode.h>
+#include "opt-wp1.h"
 
 /*
  * The process for the kernel; this holds all the kernel-only threads.
@@ -319,3 +320,12 @@ proc_setas(struct addrspace *newas)
 	spinlock_release(&proc->p_lock);
 	return oldas;
 }
+
+#if OPT_WP1
+int proc_wait(struct proc *p){
+	P(p->semSyncExit);
+	int status=p->status;
+	proc_destroy(p);
+	return status;
+}
+#endif

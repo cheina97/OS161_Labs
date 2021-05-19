@@ -3,10 +3,12 @@
 #include "thread.h"
 #include "proc.h"
 #include "lib.h"
+#include "current.h"
 
 void sys_exit(int n){
-    (void)n;
-    as_destroy(proc_getas());
+    struct proc *p=curthread->t_proc;
+    p->status=n;
+    proc_remthread(curthread);
+    V(p->semSyncExit);
     thread_exit();
-    panic("NON HA FUNZIONATO LA SYSEXIT");
 }
