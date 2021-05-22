@@ -49,11 +49,21 @@
 #include <addrspace.h>
 #include <vnode.h>
 #include "opt-wp1.h"
+#include <limits.h>
+#include <spinlock.h>
 
 /*
  * The process for the kernel; this holds all the kernel-only threads.
  */
 struct proc *kproc;
+
+struct proc* proctable[PID_MAX]={NULL};
+int current_maxpid=PID_MIN;
+struct spinlock proc_create_spinlock;
+int proc_create_spinlock_initialized=0;
+
+struct spinlock proc_current_maxpid_spinlock;
+int proc_current_maxpid_spinlock_initialized=0;
 
 /*
  * Create a proc structure.
@@ -62,6 +72,11 @@ static
 struct proc *
 proc_create(const char *name)
 {
+	if(proc_current_maxpid_spinlock_initialized==0){
+		spinlock_init(&proc_current_maxpid_spinlock);
+		proc_current_maxpid_spinlock_initialized=1;
+	}
+
 	struct proc *proc;
 
 	proc = kmalloc(sizeof(*proc));
@@ -82,6 +97,20 @@ proc_create(const char *name)
 
 	/* VFS fields */
 	proc->p_cwd = NULL;
+
+	proc->semSyncExit= sem_create("semSyncExit",0);
+
+	spinlock_acquire(&proc_current_maxpid_spinlock);
+
+	if(current_maxpid>PID_MAX) current_maxpid=PID_MIN;
+	while(proctable[current_maxpid]!=NULL){
+		current_maxpid++;
+	}
+	proc->pid=current_maxpid;
+	proctable[current_maxpid]=proc;
+	current_maxpid++;
+
+	spinlock_release(&proc_current_maxpid_spinlock);
 
 	return proc;
 }
@@ -111,6 +140,7 @@ proc_destroy(struct proc *proc)
 	 * reference to this structure. (Otherwise it would be
 	 * incorrect to destroy it.)
 	 */
+	proctable[proc->pid]=NULL;
 
 	/* VFS fields */
 	if (proc->p_cwd) {
@@ -198,6 +228,7 @@ proc_create_runprogram(const char *name)
 	struct proc *newproc;
 
 	newproc = proc_create(name);
+
 	if (newproc == NULL) {
 		return NULL;
 	}
@@ -329,3 +360,11 @@ int proc_wait(struct proc *p){
 	return status;
 }
 #endif
+
+int proc_waitpid(pid_t pid){
+	struct proc* p=proctable[pid];
+	P(p->semSyncExit);
+	int status=p->status;
+	proc_destroy(p);
+	return status;
+}

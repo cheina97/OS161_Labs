@@ -77,6 +77,8 @@ struct proc {
 	int status;
 
 	struct semaphore* semSyncExit;	
+
+	pid_t pid;
 };
 
 /* This is the process structure for the kernel and for kernel-only threads. */
@@ -105,6 +107,7 @@ struct addrspace *proc_setas(struct addrspace *);
 
 #ifdef OPT_WP1
 int proc_wait(struct proc *p);
+int proc_waitpid(pid_t pid);
 #endif // 0
 
 #endif /* _PROC_H_ */

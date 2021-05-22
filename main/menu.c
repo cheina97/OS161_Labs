@@ -119,9 +119,7 @@ common_prog(int nargs, char **args) {
 
     /* Create a process for the new program to run in. */
     proc = proc_create_runprogram(args[0] /* name */);
-
-    //AGGIUNTO DA ME
-    proc->semSyncExit= sem_create("Semaforo per sync della exit()",0);
+    
 
     if (proc == NULL) {
         return ENOMEM;
@@ -141,7 +139,7 @@ common_prog(int nargs, char **args) {
 	 * The new process will be destroyed when the program exits...
 	 * once you write the code for handling that.
 	 */
-    int exit_code=proc_wait(proc);
+    int exit_code=proc_waitpid(proc->pid);
     kprintf("SONO USCITO CON STATO: %d\n",exit_code);
     return exit_code;
 }

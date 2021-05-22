@@ -9,4 +9,5 @@ proc.o: ../../proc/proc.c ../../include/types.h \
  opt-noasserts.h ../../include/threadlist.h includelinks/machine/thread.h \
  ../../include/setjmp.h includelinks/kern/machine/setjmp.h \
  ../../include/addrspace.h ../../include/vm.h includelinks/machine/vm.h \
- ../../include/mybitmap.h opt-dumbvm.h ../../include/vnode.h
+ ../../include/mybitmap.h opt-dumbvm.h ../../include/vnode.h \
+ ../../include/limits.h ../../include/kern/limits.h
