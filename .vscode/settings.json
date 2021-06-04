@@ -13,7 +13,9 @@
         "vm.h": "c",
         "opt-sync1.h": "c",
         "opt-lab2.h": "c",
-        "proc.h": "c"
+        "proc.h": "c",
+        "addrspace.h": "c",
+        "current.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled",
 }

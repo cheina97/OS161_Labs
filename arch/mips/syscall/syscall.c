@@ -82,7 +82,7 @@
 void syscall(struct trapframe *tf) {
     int callno;
     int32_t retval;
-    int err=0;
+    int err = 0;
 
     KASSERT(curthread != NULL);
     KASSERT(curthread->t_curspl == 0);
@@ -112,12 +112,12 @@ void syscall(struct trapframe *tf) {
             break;
 
         case SYS_read:
-            sys_read((int)tf->tf_a0, (void *)tf->tf_a1, (size_t)tf->tf_a2);
+            retval = mysys_read((int)tf->tf_a0, (void *)tf->tf_a1, (size_t)tf->tf_a2);
             err = 0;
             break;
 
         case SYS_write:
-            sys_write((int)tf->tf_a0, (void *)tf->tf_a1, (size_t)tf->tf_a2);
+            retval = mysys_write((int)tf->tf_a0, (void *)tf->tf_a1, (size_t)tf->tf_a2);
             err = 0;
             break;
 
@@ -131,14 +131,29 @@ void syscall(struct trapframe *tf) {
             break;
 
         case SYS_waitpid:
-            tf->tf_v0 = sys_waitpid((pid_t)tf->tf_a0);
-			err=0;
+            retval = sys_waitpid((pid_t)tf->tf_a0);
+            err = 0;
             break;
 
-		case SYS_getpid:
-			tf->tf_v0=sys_getpid();
-			err=0;
-		break;
+        case SYS_getpid:
+            retval = sys_getpid();
+            err = 0;
+            break;
+
+        case SYS_open:
+            retval = sys_open((char *)tf->tf_a0, (int)tf->tf_a1);
+            err = 0;
+            break;
+
+        case SYS_close:
+            retval = sys_close((int)tf->tf_a0);
+            err = 0;
+            break;
+
+        case SYS_remove:
+            retval = sys_remove((char*)tf->tf_a0);
+            err=0;
+            break;
 
         default:
             kprintf("Unknown syscall %d\n", callno);

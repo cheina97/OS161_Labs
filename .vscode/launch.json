@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "/home/cheina/os161/root/kernel",
-            "stopAtEntry": true,
+            "stopAtEntry": false,
             "cwd": "/home/cheina/os161/root",
             "environment": [],
             "externalConsole": false,
