@@ -3,8 +3,6 @@ Per chi avesse avuto problemi durante la compilazione della toolchain di OS161 p
 ## *SEGUIRE LA GUIDA LINKATA QUI SOPRA E SEGUIRE I CONSIGLI SOTTOSTANTI QUANDO SI GENERANO DEGLI ERRORI (TALE PARTE POTREBBE ESSERE OPZIONALE IN BASE ALLA VERSIONE DELLA VOSTRA DISTRIBUZIONE), TERMINATA LA GUIDA ANDARE AL PROSSIMO PARAGRAFO (NON OPZIONALE)*
 
 **Librerie da installare**
-Se non sbaglio ho dovuto installare **libncurses5-dev** e **libmpc-dev**
-
 ```bash
 sudo apt install libncurses5-dev
 sudo apt install libmpc-dev
